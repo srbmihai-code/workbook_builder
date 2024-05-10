@@ -105,4 +105,4 @@ server/*
 !server/image_parser.py
 !server/main.py
 approval_app/venv
-todo.md 
+todo.md
