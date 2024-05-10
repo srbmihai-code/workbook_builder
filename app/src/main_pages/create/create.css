@@ -1,0 +1,78 @@
+:not(input):not(textarea),
+:not(input):not(textarea)::after,
+:not(input):not(textarea)::before {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-user-drag: none;
+    cursor: default;
+}
+img {
+    -webkit-user-drag: none;
+    }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+      Arial, sans-serif;
+    padding: 2rem;
+    margin: auto;
+}
+button img.plus {
+    width: 15px;
+    height: 15px;
+    box-sizing: content-box;
+}
+button img.cross {
+    width: 15px;
+    height: 15px;
+    box-sizing: content-box;
+}
+.grey {
+    color: grey;
+    margin-top: 0;
+}
+form * {
+    display: block;
+}
+.inline_field * {
+    display: inline-block;
+}
+.inline_field {
+    margin-bottom: 5px;
+}
+.indent {
+    margin-left: 30px;
+}
+.base_data input {
+    margin-bottom: 7px;
+}
+.inline_field button#add_chapter_button {
+    background-color: green;
+    border: none;
+    padding: 3px 4px 3px 4px;
+}
+.inline_field button.remove_button {
+    background-color: red;
+    border: none;
+    padding: 3px 4px 3px 4px;
+}
+input[type="file"] {
+    margin-bottom: 5px;
+}
+#iconita_culegere {
+    margin-top: 5px;
+}
+.error {
+    color: red
+}
+.yellow {
+    color:rgb(255, 205, 6);
+}
+#loading_gif {
+    width: 30px;
+}
+#loading * {
+    display: inline-block;
+    vertical-align: middle;
+}
+h3 {
+    font-size: 25px;
+}

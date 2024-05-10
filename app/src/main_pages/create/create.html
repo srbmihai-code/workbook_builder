@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Create</title>
+    <link rel="stylesheet" href="create.css">
+    <script src="create.js" defer></script>
+</head>
+
+<body>
+    <h1>Creeaza o culegere</h1>
+    <p onclick="location.href='../front_page/index.html'">⬅️Inapoi la meniu</p>
+
+    <form enctype="multipart/form-data" id="form" onsubmit="return false">
+        <h3>Date de bază</h3>
+        <div class="indent base_data">
+            <label for="form_name">Titlu:</label>
+            <input type="text" name="name" id="form_name" required>
+            <label for="form_author">Autor:</label>
+            <input type="text" name="author" id="form_author" required>
+            <label for="worbook_icon">Iconita culegere (optional):</label>
+            <input type="file" name="worbook_icon" id="worbook_icon">
+        </div>
+        <h3>Încarcă culegerea</h3>
+        <div class="indent">
+            <label>Adauga capitole:</label>
+            <ol id="chapters">
+                <li class="inline_field" id="chapter_1">
+                    <label for="nume1">Nume:</label>
+                    <input type="text" name="nume1" id="nume1" required>
+                    <label>Exerciții:</label>
+                    <input type="file" name="form_exercitii_1" multiple required accept=".png, .jpg, .jpeg, .pdf">
+                    <label>Rezolvare:</label>
+                    <input type="file" name="form_rezolvari_1" multiple required accept=".png, .jpg, .jpeg, .pdf">
+                    <label for="icon1">Iconiță (optional):</label>
+                    <input type="file" name="icon1" id="icon1">
+                    <button onclick="add_chapter()" type="button" id="add_chapter_button"><img src="../../img/plus.svg" alt="" class="plus"></button>
+                </li>
+            </ol>
+            <div class="inline_field">
+                <input type="checkbox" name="first_ommit" id="first_ommit" value="first_ommit">
+                <label for="first_ommit">Omite primul lucru din fiecare imagine</label>
+            </div>
+            <div class="inline_field"><input type="checkbox" name="last_ommit" id="last_ommit" value="last_ommit">
+                <label for="last_ommit">Omite ultimul lucru din fiecare imagine</label>
+            </div>
+            <p class="grey">Bifează dacă sunt lucruri care se repetă care ar trebui omise (numere de pagina, etc.)</p>
+        </div>
+        <h3>Setari de acces</h3>
+        <div class="indent">
+            <div class="inline_field"><label><input type="radio" id="private" name="access" value="private" onclick="set_private()" checked>
+            Privat</label></div>
+            <label for="form_password">Parola:</label>
+            <input type="password" name="password" id="password" required><br>
+            <div class="inline_field"><label><input type="radio" id="public" name="access" value="public" onclick="set_public()">
+            Public</label></div>
+            <p>Pentru a vă confirma calitatea de profesor, vă rugăm să trimiteți un email cu numele de utilizator la_.</p>
+        </div>
+        <button type="submit"  onclick="submit_form()" id="submit_form_button">Creeză culegerea</button>
+    </form>
+</body>
+</html>
