@@ -104,5 +104,7 @@ server/*
 !server/create_html_json.py
 !server/image_parser.py
 !server/main.py
+!server/requirements.txt
 approval_app/venv
 todo.md
+temp_public_workbooks_data/*

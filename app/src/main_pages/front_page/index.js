@@ -51,16 +51,26 @@ function render_main() {
             document.getElementsByClassName("grid")[0].children[index].addEventListener("click", () => {
                 see_chapters(workbook);
             })
+            document.getElementsByClassName("grid")[0].children[index].addEventListener("contextmenu", (event) => {
+                clicked_workbook_hash = event.currentTarget.id
+                console.log(clicked_workbook_hash)
+                event.preventDefault()
+                if (document.getElementsByClassName('popup').length != 0 ) {
+                    document.getElementsByClassName('popup')[0].remove()
+                }
+    
+                right_click_popup(event.clientX + window.scrollX, event.clientY + window.scrollY)
+            })
         })(i)
 
     }
 }
 try {
-    const data = fs.readFileSync(path.join(__dirname, 'last.txt'), 'utf-8');
+    const data = fs.readFileSync(path.join(user_dir, 'last.txt'), 'utf-8');
     if (data === "") {
         render_main();
     } else {
-        fs.writeFileSync(path.join(__dirname, 'last.txt'), '');
+        fs.writeFileSync(path.join(user_dir, 'last.txt'), '');
         see_chapters(data);
     }
 } catch (err) {

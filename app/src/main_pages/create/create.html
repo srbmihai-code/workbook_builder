@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Create</title>
+    <title>Workbook Builder</title>
     <link rel="stylesheet" href="create.css">
     <script src="create.js" defer></script>
 </head>
@@ -17,8 +17,6 @@
         <div class="indent base_data">
             <label for="form_name">Titlu:</label>
             <input type="text" name="name" id="form_name" required>
-            <label for="form_author">Autor:</label>
-            <input type="text" name="author" id="form_author" required>
             <label for="worbook_icon">Iconita culegere (optional):</label>
             <input type="file" name="worbook_icon" id="worbook_icon">
         </div>
@@ -55,7 +53,7 @@
             <input type="password" name="password" id="password" required><br>
             <div class="inline_field"><label><input type="radio" id="public" name="access" value="public" onclick="set_public()">
             Public</label></div>
-            <p>Pentru a vă confirma calitatea de profesor, vă rugăm să trimiteți un email cu numele de utilizator la_.</p>
+            <p>Pentru a vă confirma calitatea de profesor, vă rugăm să trimiteți un email cu numele de utilizator la workbook_builder@protonmail.com.</p>
         </div>
         <button type="submit"  onclick="submit_form()" id="submit_form_button">Creeză culegerea</button>
     </form>

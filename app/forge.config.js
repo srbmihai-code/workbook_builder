@@ -1,6 +1,10 @@
 module.exports = {
   packagerConfig: {
     asar: true,
+    icon: 'src/img/workbook',
+    extraResource: [
+      'src/img/workbook'
+    ]
   },
   rebuildConfig: {},
   makers: [

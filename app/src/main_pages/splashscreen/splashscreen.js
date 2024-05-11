@@ -5,6 +5,7 @@ const { get } = require('http');
 const { create } = require('domain');
 
 const user_dir = fs.readFileSync(path.join(__dirname, '..', '..', 'user_dir.txt'), 'utf8');
+const server_url = fs.readFileSync(path.join(__dirname, '..', '..', 'server_url.txt'), 'utf8');
 
 function get_subdirs(directoryPath) {
     try {

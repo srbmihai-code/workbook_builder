@@ -14,10 +14,11 @@ const createWindow = () => {
     height: 600,
     'minWidth': 875,
     show: false,
+    // icon: './img/workbook',
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
-      devTools: true
+      devTools: false
     },
   });
 
@@ -48,8 +49,8 @@ app.whenReady().then(() => {
   if (!fs.existsSync(user_dir)) {
     fs.mkdirSync(user_dir);
   }
-  if (!fs.existsSync(path.join(user_dir, 'last.txt'))) {
-    fs.writeFileSync(path.join(user_dir, 'last.txt'), '');
+  if (!fs.existsSync(path.join((user_dir, 'last.txt')))) {
+    fs.writeFileSync(path.join((user_dir, 'last.txt')), '');
   }
   createWindow()
 })
