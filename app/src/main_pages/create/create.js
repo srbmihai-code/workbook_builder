@@ -47,8 +47,8 @@ function submit_form() {
     form.insertAdjacentHTML('beforeend', `<div id="loading"><img src="../../img/loading.gif" id="loading_gif"><p class="yellow" id = "loading_text">Se incarca...</p></div>`)
     let form_data = new FormData(form);
     const credentials = JSON.parse(fs.readFileSync(path.join((user_dir, 'credentials.json')), 'utf8'));
-    form_data.append('name', credentials.name)
-    form_data.append('password', credentials.password)
+    form_data.append('username', credentials.name)
+    form_data.append('user_password', credentials.password)
     fetch(`${server_url}/add_workbook`, {
         method: 'POST',
         body: form_data

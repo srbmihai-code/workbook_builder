@@ -8,6 +8,7 @@ from werkzeug.utils import secure_filename
 from markupsafe import escape
 from dotenv import load_dotenv
 import filetype
+import hashlib
 import uuid
 import os
 import json
@@ -66,7 +67,9 @@ def send_message(message):
 @app.route('/add_workbook', methods=['POST'])
 def add_workbook():
     form = request.form
-    user = users.query.filter_by(name=escape(form['username']), password=form['password']).first()
+    password = hashlib.sha512(form['password'].encode('utf-8')).hexdigest()
+    user_password = hashlib.sha512(form['user_password'].encode('utf-8')).hexdigest()
+    user = users.query.filter_by(name=escape(form['username']), password=user_password).first()
     if user is None:
         return 'account not found', 400
     if form.get('password') is None and user.approved==False:
@@ -147,7 +150,7 @@ def add_workbook():
         json.dump(workbook_data, outfile)
     make_archive(f'{workbook_path}', 'zip', f'{workbook_path}')
     if form.get('code') is None:
-        workbook = workbooks(workbook_hash, workbook_data['name'],workbook_data['author'], form['password'])
+        workbook = workbooks(workbook_hash, workbook_data['name'],workbook_data['author'], password)
     else:
         workbook = workbooks(workbook_hash, workbook_data['name'],workbook_data['author'], None)
     db.session.add(workbook)
@@ -161,7 +164,8 @@ def get_workbook():
     form = request.form
     author_name = users.query.filter_by(author=form['author']).author
     if form.get('password') is not None:
-        workbook = workbooks.query.filter_by(name=escape(form['name']), author=escape(author_name), password=form['password']).first()
+        password = hashlib.sha512(form['password'].encode('utf-8')).hexdigest()
+        workbook = workbooks.query.filter_by(name=escape(form['name']), author=escape(author_name), password=password).first()
     else:
         workbook = workbooks.query.filter_by(name=escape(form['name']), author=escape(author_name)).first()
     if workbook is not None:
@@ -193,7 +197,8 @@ def get_public_workbooks():
 def accounts():
     form = request.form
     if form.get('author') is None:
-        if users.query.filter_by(name=escape(form['name']), password=form['password']).first() is None:
+        password = hashlib.sha512(form['password'].encode('utf-8')).hexdigest()
+        if users.query.filter_by(name=escape(form['name']), password=password).first() is None:
             return 'incorrect', 400
         else:
             workbooks_belonging = workbooks.query.filter_by(author=form['name']).all()
@@ -211,7 +216,8 @@ def accounts():
     else:
         if users.query.filter_by(name=escape(form['name'])).first() is not None:
             return 'already', 400
-        new_user = users(form['name'], form['author'], form['password'])
+        password = hashlib.sha512(form['password'].encode('utf-8')).hexdigest()
+        new_user = users(form['name'], form['author'], password)
         db.session.add(new_user)
         db.session.commit()
         return '', 200
@@ -221,7 +227,8 @@ def delete_workbook():
     form = request.form
     if workbooks.query.filter_by(hash=form['hash']).first() is None:
         return 'incorrect', 400
-    if users.query.filter_by(name=escape(form['name']), password=form['password']).first() is None or workbooks.query.filter_by(hash=form['hash']).first().author != form['name']:
+    password = hashlib.sha512(form['password'].encode('utf-8')).hexdigest()
+    if users.query.filter_by(name=escape(form['name']), password=password).first() is None or workbooks.query.filter_by(hash=form['hash']).first().author != form['name']:
         return 'incorrect', 400
     db.session.delete(workbooks.query.filter_by(hash=form['hash']).first())
     db.session.commit()

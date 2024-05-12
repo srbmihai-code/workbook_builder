@@ -5,7 +5,7 @@ import cv2
 import pytesseract
 import json
 
-pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files (x86)\Tesseract-OCR\tesseract.exe'
+pytesseract.pytesseract.tesseract_cmd = '/usr/bin/tesseract'
 
 def find_if_exercise(filename):
     image = cv2.imread(filename)

@@ -5,6 +5,7 @@ const { getPackedSettings } = require('http2');
 
 const user_dir = fs.readFileSync(path.join(__dirname, '..', '..', 'user_dir.txt'), 'utf8');
 const server_url = fs.readFileSync(path.join(__dirname, '..', '..', 'server_url.txt'), 'utf8');
+
 let filename
 let clicked_workbook_hash
 
