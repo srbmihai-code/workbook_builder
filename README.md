@@ -58,7 +58,7 @@ $ git clone https://github.com/srbmihai-code/workbook_builder.git
 $ cd app
 $ npm install
 ```
-Sau puteti descarca direct un fisier exe de Windows de pe pagina releases
+Sau puteti descarca direct un fisier exe de Windows de pe pagina [releases](https://github.com/srbmihai-code/workbook_builder/releases)
 
 ### Server
 Pentru a rula server-ul, descarcati codul si descarcati pachetele necesare 
