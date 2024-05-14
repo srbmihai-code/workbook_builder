@@ -50,3 +50,21 @@ Meniul pentru profesor
 
 
 ## Instalare
+
+### Aplicatie Desktop
+Pentru a instala, puteti descarca codul si compila
+```console
+$ git clone https://github.com/srbmihai-code/workbook_builder.git
+$ cd app
+$ npm install
+```
+Sau puteti descarca direct un fisier exe de Windows de pe pagina releases
+
+### Server
+Pentru a rula server-ul, descarcati codul si descarcati pachetele necesare 
+```console
+$ git clone https://github.com/srbmihai-code/workbook_builder.git
+$ cd server
+$ pip install -r requirements.txt
+$ waitress-serve --host 0.0.0.0 main:app
+```
