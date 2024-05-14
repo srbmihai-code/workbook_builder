@@ -8,7 +8,7 @@ Astfel, daca un elev se blocheaza la un exercitiu, poate cere un indiciu si o li
 
 ### Cum se creeaza o culegere?
 
-Profesorul trebuie sa introduca titlu culegerii si sa incarce fisierele culegerii. Se pot creea mai multe capitole. Culegerile pot fi private, adica cu pot fi descarcate de elevi cu parola, sau publice.
+Profesorul trebuie sa introduca titlu culegerii si sa incarce fisierele culegerii. Se pot creea mai multe capitole. Culegerile pot fi private, adica pot fi descarcate de elevi cu parola, sau publice.
 ![image](https://github.com/srbmihai-code/workbook_builder/assets/154465191/7eabed3d-781f-4477-977b-38d6f2babd28)
 
 ### Cum se descarca o culegere?
