@@ -42,12 +42,14 @@ function submit_form() {
     document.getElementById('submit_form_button').disabled = true
 
     if (!form.reportValidity()) {
+        document.getElementById('submit_form_button').disabled = false
         return;
     }
     form.insertAdjacentHTML('beforeend', `<div id="loading"><img src="../../img/loading.gif" id="loading_gif"><p class="yellow" id = "loading_text">Se incarca...</p></div>`)
     let form_data = new FormData(form);
-    const credentials = JSON.parse(fs.readFileSync(path.join((user_dir, 'credentials.json')), 'utf8'));
-    form_data.append('username', credentials.name)
+    const credentials = JSON.parse(fs.readFileSync(path.join(user_dir, 'credentials.json'), 'utf8'));
+    console.log()
+    form_data.append('username', credentials.username)
     form_data.append('user_password', credentials.password)
     fetch(`${server_url}/add_workbook`, {
         method: 'POST',
@@ -55,6 +57,8 @@ function submit_form() {
     })
     .then(response => {
         if (!response.ok) {
+            if (document.querySelector('.error'))
+                document.querySelector('.error').remove()
             document.getElementById('loading').remove()
             response.text().then(errorMessage => {
                 if (errorMessage=='already') {
@@ -71,6 +75,7 @@ function submit_form() {
                     form.insertAdjacentHTML('beforeend', `<p class="error">Contul nu există, incercati sa va delogati și sa va autentificati din nou</p>`)
                 }
                 else {
+                    console.log(errorMessage)
                     form.insertAdjacentHTML('beforeend', `<p class="error">A apărut o eroare cu procesarea culegerii</p>`)
                 }
                 server_error = true;
@@ -89,7 +94,7 @@ function submit_form() {
         document.getElementById('loading').remove()
         const zipPath = path.join(__dirname, `${filename}`);
         fs.writeFileSync(zipPath, Buffer.from(buffer));
-        const extractDir = path.join(__dirname, '..', '..', 'created_workbooks', `${filename}`);
+        const extractDir = path.join(__dirname, '..', '..', 'workbooks','created_workbooks', `${filename}`);
         if (!fs.existsSync(extractDir)) {
             fs.mkdirSync(extractDir);
         }
@@ -100,7 +105,10 @@ function submit_form() {
         
     })
     .catch(error => {
-        console.error('Error fetching data and unzipping:', error.message);
+        if (document.getElementById('loading'))
+            document.getElementById('loading').remove()
+        console.log(error)
+        form.insertAdjacentHTML('beforeend', `<p class="error">A apărut o eroare cu procesarea culegerii</p>`)
     });
     document.getElementById('submit_form_button').disabled = false
 }

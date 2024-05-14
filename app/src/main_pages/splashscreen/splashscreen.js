@@ -85,6 +85,8 @@ function submit_form_auth() {
         if (!response.ok) {
             response.text().then(errorMessage => {
                 if (errorMessage=='incorrect') {
+                    if (document.querySelector('.error'))
+                        document.querySelector('.error').remove()
                     form.insertAdjacentHTML('beforeend', `<p class="error">Numele sau parola nu sunt corecte</p>`)
                     server_error = true;
                 }
@@ -98,7 +100,7 @@ function submit_form_auth() {
         const zipPath = path.join(__dirname, `${filename}`);
         fs.writeFileSync(zipPath, Buffer.from(buffer));
         const folder_name = 'created_workbooks'
-        const extractDir = path.join(__dirname, '..', '..', `${folder_name}`);
+        const extractDir = path.join(__dirname, '..', '..', 'workbooks', `${folder_name}`);
         if (fs.existsSync(extractDir)) {
             fs.rmSync(extractDir, { recursive: true, force: true });
         }
@@ -109,9 +111,9 @@ function submit_form_auth() {
         const created_workbooks = fs.readdirSync(extractDir);
 
         for (const created_workbook of created_workbooks) {
-            zip = new AdmZip(path.join(__dirname, '..', '..', `${folder_name}`, created_workbook));
-            zip.extractAllTo(path.join(__dirname, '..', '..', `${folder_name}`, created_workbook.replace('.zip', '')), true);
-            fs.unlinkSync(path.join(__dirname, '..', '..', `${folder_name}`, created_workbook));
+            zip = new AdmZip(path.join(__dirname, '..', '..', 'workbooks', `${folder_name}`, created_workbook));
+            zip.extractAllTo(path.join(__dirname, '..', '..', 'workbooks', `${folder_name}`, created_workbook.replace('.zip', '')), true);
+            fs.unlinkSync(path.join(__dirname, '..', '..', 'workbooks', `${folder_name}`, created_workbook));
         }
         fs.writeFileSync(path.join(user_dir, 'credentials.json'), JSON.stringify({
             "username": form_data.get("name"),

@@ -5,7 +5,7 @@ import cv2
 import pytesseract
 import json
 
-pytesseract.pytesseract.tesseract_cmd = '/usr/bin/tesseract'
+pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files (x86)\Tesseract-OCR\tesseract.exe'
 
 def find_if_exercise(filename):
     image = cv2.imread(filename)
@@ -101,13 +101,13 @@ def create_html_json(directory, title):
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="../../exercitii.css">
-    <script src="../../exercitii.js" defer></script>
+    <title>Workbook Builder</title>
+    <link rel="stylesheet" href="../../../exercitii.css">
+    <script src="../../../exercitii.js" defer></script>
 </head>
 <body>
 <h1 id="titlu">{exercises['name']}</h1>
-<a href="../../../main_pages/front_page/index.html">⬅️Inapoi la meniu</a>
+<a href="../../../../main_pages/front_page/index.html">⬅️Inapoi la meniu</a>
 <div style="display: flex;align-items: center;" class="date"><p id="fractie"></p>
 <progress value="" max="" id="progres"></progress></div>
 {html}

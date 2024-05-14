@@ -35,8 +35,11 @@ function render_main() {
       <p>Creeaza o culegere</p>
     </div>
     `
-    let all_workbooks = user_type==="student" ? get_subdirs(path.join(__dirname, '..', '..', 'workbooks')) :
-                        get_subdirs(path.join(__dirname, '..', '..', 'created_workbooks'))
+    if (!fs.existsSync(path.join(__dirname, '..', '..', 'workbooks', 'workbooks'))) {
+        fs.mkdirSync(path.join(__dirname, '..', '..', 'workbooks', 'workbooks'))
+    }
+    let all_workbooks = user_type==="student" ? get_subdirs(path.join(__dirname, '..', '..', 'workbooks', 'workbooks')) :
+                        get_subdirs(path.join(__dirname, '..', '..', 'workbooks', 'created_workbooks'))
     for (const [i,workbook] of all_workbooks.entries()) {
         const workbok_data = JSON.parse(fs.readFileSync(path.join(workbook, 'data.json'), 'utf8'))
         const name_of_workbook = workbok_data.name
@@ -99,7 +102,7 @@ function right_click_popup(x, y) {
     });
 }
 function remove_workbook() {
-    fs.rm(path.join(__dirname, '..', '..', 'workbooks', clicked_workbook_hash), { recursive: true, force: true },(e)=>{console.log(e)})
+    fs.rm(path.join(__dirname, '..', '..', 'workbooks', 'workbooks', clicked_workbook_hash), { recursive: true, force: true },(e)=>{console.log(e)})
 
 
     document.getElementById(clicked_workbook_hash).remove()
@@ -202,7 +205,7 @@ function submit_form() {
         const zipPath = path.join(__dirname, `${filename}`);
         fs.writeFileSync(zipPath, Buffer.from(buffer));
         const folder_name = filename.replace('.zip', '')
-        const extractDir = path.join(__dirname, '..', '..', 'workbooks', `${folder_name}`);
+        const extractDir = path.join(__dirname, '..', '..', 'workbooks', 'workbooks', `${folder_name}`);
         if (!fs.existsSync(extractDir)) {
             fs.mkdirSync(extractDir);
         }
@@ -253,7 +256,7 @@ function see_public_workbooks() {
     </div>
     `;
     const grid = document.getElementsByClassName("grid")[0]
-    const downloaded_workbooks = get_subdirs(path.join(__dirname, '..', '..', 'workbooks')).map(e => e.match("[^\\\\]+$")[0]);
+    const downloaded_workbooks = get_subdirs(path.join(__dirname, '..', '..', 'workbooks', 'workbooks')).map(e => e.match("[^\\\\]+$")[0]);
     for (let public_workbook of Object.values(public_workbooks_data)) {
         if (downloaded_workbooks.includes(public_workbook.hash)) 
         grid.insertAdjacentHTML('beforeend', `
@@ -293,7 +296,7 @@ function download(public_workbooks_data) {
         const zipPath = path.join(__dirname, `${filename}`);
         fs.writeFileSync(zipPath, Buffer.from(buffer));
         const folder_name = filename.replace('.zip', '')
-        const extractDir = path.join(__dirname, '..', '..', 'workbooks', `${folder_name}`);
+        const extractDir = path.join(__dirname, '..', '..', 'workbooks', 'workbooks', `${folder_name}`);
         if (!fs.existsSync(extractDir)) {
             fs.mkdirSync(extractDir);
         }
@@ -319,7 +322,7 @@ function show_delete_popup(workbook_hash) {
 
 function delete_workbook(workbook_hash) {
     let form_data = new FormData();
-    const credentials = JSON.parse(fs.readFileSync(path.join((user_dir, 'credentials.json')), 'utf8'));
+    const credentials = JSON.parse(fs.readFileSync(path.join(user_dir, 'credentials.json'), 'utf8'));
     form_data.append('name', credentials.username)
     form_data.append('password', credentials.password)
     form_data.append('hash', workbook_hash)
@@ -335,7 +338,7 @@ function delete_workbook(workbook_hash) {
             document.getElementsByTagName('h2')[0].insertAdjacentHTML('afterend', '<p class="error">A ăparut o eroare cu ștergerea culegerii</p>')
             throw new Error('error with deletion')
         }
-        fs.rmSync(path.join(__dirname, '..', '..', 'created_workbooks', workbook_hash), { recursive: true, force: true });
+        fs.rmSync(path.join(__dirname, '..', '..', 'workbooks','created_workbooks', workbook_hash), { recursive: true, force: true });
         rerender_main()
     })
     .catch(e => {

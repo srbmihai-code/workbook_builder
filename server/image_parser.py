@@ -33,6 +33,8 @@ def parse_directory(directory, output_directory, first_ommit, last_ommit):
             elif (x==(width-1) and start!=0): 
                 cropped_img.append([start_of_file,start,width,y])
                 start=0
+        for i in range(len(cropped_img)-1):
+            strip_space.append(cropped_img[i+1][1]-cropped_img[i][3])
         # Delete
         for i in range(1,len(cropped_img)):
             if strip_space[i-1] < 10 and cropped_img[i-1] is not None:

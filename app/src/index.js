@@ -49,8 +49,8 @@ app.whenReady().then(() => {
   if (!fs.existsSync(user_dir)) {
     fs.mkdirSync(user_dir);
   }
-  if (!fs.existsSync(path.join((user_dir, 'last.txt')))) {
-    fs.writeFileSync(path.join((user_dir, 'last.txt')), '');
+  if (!fs.existsSync(path.join(user_dir, 'last.txt'))) {
+    fs.writeFileSync(path.join(user_dir, 'last.txt'), '');
   }
   createWindow()
 })
