@@ -66,5 +66,24 @@ Pentru a rula server-ul, descarcati codul si descarcati pachetele necesare
 $ git clone https://github.com/srbmihai-code/workbook_builder.git
 $ cd server
 $ pip install -r requirements.txt
+$ python
+> from main import db, app
+> app.app_context().push()
+> db.create_all()
 $ waitress-serve --host 0.0.0.0 main:app
+```
+Daca vreti sa testati cum functioneaza o culegere, puteti descarca culegerea "Probleme de matematică pentru clasa a IX-a  -olimpiadă și concursuri" – de Enache Pătrașcu de pe pagina [releases](https://github.com/srbmihai-code/workbook_builder/releases). Trebuie sa puneti cele 2 foldere in folderul cu serverul si ea va putea fi accesata.
+
+### Approval app
+Pentru a pastra securitatea aplicatiei, in server este o lista cu utilizatorii care pot incarca culegeri publice.
+Pentru a da acces unui utilizator, descarcati codul si rulati urmatoarea comanda:
+```console
+$ git clone https://github.com/srbmihai-code/workbook_builder.git
+$ cd approval_app
+$ pip install -r requirements.txt
+$ python main.py username
+```
+Pentru a asigura ca doar persoanele autorizate pot face acest lucru, atat in folderul server cat si in approval_app trebuie sa fie un fisier .env in care sa se specifice o cheie
+```
+SECRET_KEY = "cheie"
 ```
