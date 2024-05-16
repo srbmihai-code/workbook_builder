@@ -85,7 +85,6 @@ def add_workbook():
             return 'not approved', 400
         if workbooks.query.filter_by(name=escape(form['name']), author=escape(form['username'])).first() is not None:
             return 'already', 400
-        print('d')
         if form.get('last_ommit') is None:
             last_ommit = False
         else:
@@ -174,19 +173,22 @@ def add_workbook():
 
 @app.route('/get_workbook', methods=['POST'])
 def get_workbook():
-    form = request.form
-    author_name = users.query.filter_by(author=form['author']).author
-    if form.get('password') is not None:
-        password = hashlib.sha512(form['password'].encode('utf-8')).hexdigest()
-        workbook = workbooks.query.filter_by(name=escape(form['name']), author=escape(author_name), password=password).first()
-    else:
-        workbook = workbooks.query.filter_by(name=escape(form['name']), author=escape(author_name)).first()
-    if workbook is not None:
-        response = send_file(f'workbooks/{workbook.hash}.zip', as_attachment=True, download_name=f'{workbook.hash}.zip')
-        response.headers["X-Filename"] = f'{workbook.hash}.zip'
-        return response
-    else:
-        return 'not found', 400
+    try:
+        form = request.form
+        if form.get('password') is not None:
+            author_name = users.query.filter_by(author=form['author']).first().author
+            password = hashlib.sha512(form['password'].encode('utf-8')).hexdigest()
+            workbook = workbooks.query.filter_by(name=escape(form['name']), author=escape(author_name), password=password).first()
+        else:
+            workbook = workbooks.query.filter_by(hash=form['hash']).first()
+        if workbook is not None:
+            response = send_file(f'workbooks/{workbook.hash}.zip', as_attachment=True, download_name=f'{workbook.hash}.zip')
+            response.headers["X-Filename"] = f'{workbook.hash}.zip'
+            return response
+        else:
+            return 'not found', 400
+    except Exception as e:
+        print(e)
 
 @app.route('/get_public_workbooks', methods=['POST'])
 def get_public_workbooks():
@@ -209,35 +211,36 @@ def get_public_workbooks():
 
 @app.route('/accounts', methods=['POST'])
 def accounts():
-    log_all()
-    log_all_users()
-    form = request.form
-    if form.get('author') is None:
-        password = hashlib.sha512(form['password'].encode('utf-8')).hexdigest()
-        if users.query.filter_by(name=escape(form['name']), password=password).first() is None:
-            return 'incorrect', 400
+    try:
+        log_all_users()
+        form = request.form
+        if form.get('author') is None:
+            password = hashlib.sha512(form['password'].encode('utf-8')).hexdigest()
+            if users.query.filter_by(name=escape(form['name']), password=password).first() is None:
+                return 'incorrect', 400
+            else:
+                workbooks_belonging = workbooks.query.filter_by(author=form['name']).all()
+                workbooks_hashes = map(lambda workbook: workbook.hash, workbooks_belonging)
+                if os.path.exists('./temp_workbooks_to_send'):
+                    rmtree('./temp_workbooks_to_send')
+                if os.path.exists('./temp_workbooks_to_send.zip'):
+                    os.remove('./temp_workbooks_to_send.zip')
+                os.mkdir('./temp_workbooks_to_send')
+                for workbook_hash in workbooks_hashes:
+                    copyfile(f'./workbooks/{workbook_hash}.zip', f'./temp_workbooks_to_send/{workbook_hash}.zip')
+                make_archive('./temp_workbooks_to_send', 'zip', './temp_workbooks_to_send')
+                response = send_file('./temp_workbooks_to_send.zip', as_attachment=True, download_name=f'temp_workbooks_to_send.zip')
+                return response
         else:
-            workbooks_belonging = workbooks.query.filter_by(author=form['name']).all()
-            workbooks_hashes = map(lambda workbook: workbook.hash, workbooks_belonging)
-            if os.path.exists('./temp_workbooks_to_send'):
-                rmtree('./temp_workbooks_to_send')
-            if os.path.exists('./temp_workbooks_to_send.zip'):
-                os.remove('./temp_workbooks_to_send.zip')
-            os.mkdir('./temp_workbooks_to_send')
-            for workbook_hash in workbooks_hashes:
-                copyfile(f'./workbooks/{workbook_hash}.zip', f'./temp_workbooks_to_send/{workbook_hash}.zip')
-            make_archive('./temp_workbooks_to_send', 'zip', './temp_workbooks_to_send')
-            response = send_file('./temp_workbooks_to_send.zip', as_attachment=True, download_name=f'temp_workbooks_to_send.zip')
-            return response
-    else:
-        if users.query.filter_by(name=escape(form['name'])).first() is not None:
-            return 'already', 400
-        password = hashlib.sha512(form['password'].encode('utf-8')).hexdigest()
-        new_user = users(form['name'], form['author'], password)
-        db.session.add(new_user)
-        db.session.commit()
-        return '', 200
-
+            if users.query.filter_by(name=escape(form['name'])).first() is not None:
+                return 'already', 400
+            password = hashlib.sha512(form['password'].encode('utf-8')).hexdigest()
+            new_user = users(form['name'], form['author'], password)
+            db.session.add(new_user)
+            db.session.commit()
+            return '', 200
+    except Exception as e:
+        print(e)
 @app.route('/delete_workbook', methods=['POST'])
 def delete_workbook():
     form = request.form
@@ -249,6 +252,7 @@ def delete_workbook():
     db.session.delete(workbooks.query.filter_by(hash=form['hash']).first())
     db.session.commit()
     return '', 200
+
 
 @app.route('/approve', methods=['POST'])
 def approve():

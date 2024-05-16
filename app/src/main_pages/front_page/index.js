@@ -55,6 +55,7 @@ function render_main() {
             document.getElementsByClassName("grid")[0].children[index].addEventListener("click", () => {
                 see_chapters(workbook);
             })
+            if (user_type==="student")
             document.getElementsByClassName("grid")[0].children[index].addEventListener("contextmenu", (event) => {
                 clicked_workbook_hash = event.currentTarget.id
                 console.log(clicked_workbook_hash)
@@ -62,7 +63,6 @@ function render_main() {
                 if (document.getElementsByClassName('popup').length != 0 ) {
                     document.getElementsByClassName('popup')[0].remove()
                 }
-    
                 right_click_popup(event.clientX + window.scrollX, event.clientY + window.scrollY)
             })
         })(i)
@@ -272,8 +272,7 @@ function see_public_workbooks() {
 }
 function download(public_workbooks_data) {
     let form_data = new FormData();
-    form_data.append('name', public_workbooks_data.name)
-    form_data.append('author', public_workbooks_data.author)
+    form_data.append('hash', public_workbooks_data.hash)
     const place_to_show_error = document.getElementById(public_workbooks_data.hash)
     fetch(`${server_url}/get_workbook`, {
         method: 'POST',
@@ -282,10 +281,6 @@ function download(public_workbooks_data) {
     .then(response => {
         if (!response.ok) {
             response.text().then(errorMessage => {
-                if (errorMessage=='not found') {
-                    server_error = true;
-                }
-
             });
             throw new Error('Numele sau parola nu sunt corecte')
         }
@@ -303,10 +298,13 @@ function download(public_workbooks_data) {
         const zip = new AdmZip(zipPath);
         zip.extractAllTo(extractDir, true);
         fs.unlinkSync(zipPath);
-
         place_to_show_error.querySelector('button').classList.remove('download')
         place_to_show_error.querySelector('button').classList.add('downloaded')
         place_to_show_error.querySelector('button').innerHTML = 'Descărcat'
+    })
+    .catch(e => {
+        place_to_show_error.insertAdjacentHTML('beforeend', '<p class="error">A aparut o eroare cu descarcarea culegerii</p>')
+        console.log(e)
     })
 }
 

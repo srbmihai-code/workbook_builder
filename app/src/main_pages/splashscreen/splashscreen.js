@@ -88,10 +88,14 @@ function submit_form_auth() {
                     if (document.querySelector('.error'))
                         document.querySelector('.error').remove()
                     form.insertAdjacentHTML('beforeend', `<p class="error">Numele sau parola nu sunt corecte</p>`)
-                    server_error = true;
+                }
+                else {
+                    if (document.querySelector('.error'))
+                        document.querySelector('.error').remove()
+                    form.insertAdjacentHTML('beforeend', `<p class="error">A aparut o eroarea cu autentificarea</p>`)
                 }
             });
-            throw new Error('Numele sau parola nu sunt corecte')
+            throw new Error('error')
         }
         filename = response.headers.get('X-Filename');
         return response.arrayBuffer();
@@ -148,12 +152,18 @@ function submit_form_create() {
             throw new Error('Acest nume de utilizator s-a luat deja')
         }
         fs.writeFileSync(path.join(user_dir, 'credentials.json'), JSON.stringify({
-            "name": form_data.get("name"),
+            "username": form_data.get("name"),
             "password": form_data.get("password")
         }))
         fs.writeFileSync(path.join(user_dir, 'settings.json'), JSON.stringify({
             "user_type": "teacher"
         }))
+        const folder_name = 'created_workbooks'
+        const extractDir = path.join(__dirname, '..', '..', 'workbooks', `${folder_name}`);
+        if (fs.existsSync(extractDir)) {
+            fs.rmSync(extractDir, { recursive: true, force: true });
+        }
+        fs.mkdirSync(extractDir);
         location.href = '../front_page/index.html'
     })
     .catch(error => {

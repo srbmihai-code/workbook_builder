@@ -6,7 +6,7 @@ import json
 
 load_dotenv()
 
-url = 'http://78.97.58.55:8080/approve'
+url = 'http://127.0.0.1:8080/approve'
 SECRET_KEY = os.getenv("SECRET_KEY")
 username = argv[1]
 

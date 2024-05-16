@@ -5,7 +5,6 @@ const { error } = require('console');
 
 let filename
 let chapter_counter = 1;
-let server_error;
 const server_url = fs.readFileSync(path.join(__dirname, '..', '..', 'server_url.txt'), 'utf8');
 const user_dir = fs.readFileSync(path.join(__dirname, '..', '..', 'user_dir.txt'), 'utf8');
 
@@ -78,12 +77,7 @@ function submit_form() {
                     console.log(errorMessage)
                     form.insertAdjacentHTML('beforeend', `<p class="error">A apărut o eroare cu procesarea culegerii</p>`)
                 }
-                server_error = true;
-
             });
-        }
-        if (server_error) {
-            server_error = false;
             throw new Error('error')
         }
         filename = response.headers.get('X-Filename');
