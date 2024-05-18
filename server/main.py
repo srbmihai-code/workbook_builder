@@ -107,6 +107,8 @@ def add_workbook():
         if workbook_icon is not None:
             print(f'{workbook_path}/icon.png')
             workbook_icon.save(f'{workbook_path}/icon.png')
+            if not os.path.exists('./icons'):
+                os.mkdir('./icons')
             workbook_icon.save(f'./icons/{workbook_hash}.png')
         chapter_names = filter(lambda x: 'nume' in x, form)
         chapter_names = [escape(x) for x in chapter_names]
@@ -202,6 +204,8 @@ def get_public_workbooks():
         rmtree('./temp_public_workbooks_data')
     if os.path.exists('./temp_public_workbooks_data.zip'):
         os.remove('./temp_public_workbooks_data.zip')
+    if not os.path.exists('./icons'):
+        os.mkdir('./icons')
     copytree('icons', 'temp_public_workbooks_data')
     with open('temp_public_workbooks_data/public_workbooks_data.json', 'w') as f:
         json.dump(public_workbooks_data, f)

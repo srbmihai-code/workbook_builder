@@ -1,7 +1,7 @@
 {
   "name": "workbook_builder",
   "productName": "Workbook Builder",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Creeaza culegeri interactive",
   "main": "src/index.js",
   "scripts": {
@@ -33,5 +33,7 @@
     "node-html-parser": "^6.1.11",
     "temml": "^0.10.17",
     "texzilla": "^1.0.2"
-  }
+  },
+  "build": {
+    "asar": false}
 }

@@ -1,6 +1,6 @@
 module.exports = {
   packagerConfig: {
-    asar: true,
+    asar: false,
     icon: 'src/img/workbook',
     extraResource: [
       'src/img/workbook'
@@ -25,10 +25,10 @@ module.exports = {
       config: {},
     },
   ],
-  plugins: [
-    {
-      name: '@electron-forge/plugin-auto-unpack-natives',
-      config: {},
-    },
-  ],
+  // plugins: [
+  //   {
+  //     name: '@electron-forge/plugin-auto-unpack-natives',
+  //     config: {},
+  //   },
+  // ],
 };

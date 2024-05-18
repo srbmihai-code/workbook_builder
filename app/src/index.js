@@ -1,6 +1,7 @@
-const { app, BrowserWindow} = require('electron');
+const { app, BrowserWindow, globalShortcut} = require('electron');
 const path = require('path');
 const fs = require('fs')
+
 let user_dir
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -34,10 +35,13 @@ const createWindow = () => {
     mainWindow.loadFile(path.join(__dirname, 'main_pages', 'front_page','index.html'));
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  //mainWindow.webContents.openDevTools();
   mainWindow.setMenuBarVisibility(false)
   mainWindow.maximize()
   mainWindow.show()
+  globalShortcut.register('CommandOrControl+Shift+K', () => {
+    mainWindow.webContents.toggleDevTools();
+  });
 };
 
 // This method will be called when Electron has finished
@@ -70,3 +74,4 @@ app.on('activate', () => {
     createWindow();
   }
 });
+
