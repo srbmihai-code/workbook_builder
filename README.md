@@ -61,7 +61,7 @@ $ npm install
 Sau puteti descarca direct un fisier exe de Windows de pe pagina [releases](https://github.com/srbmihai-code/workbook_builder/releases)
 
 ### Server
-Pentru a rula server-ul, descarcati codul si descarcati pachetele necesare 
+Pentru a rula server-ul, descarcati codul si descarcati pachetele necesare. De asemenea trebuiesc descarcate Tesseract (se ocupa cu scanarea) si Poppler (se ocupa cu transformarea fisierelor pdf in imagini).
 ```console
 $ git clone https://github.com/srbmihai-code/workbook_builder.git
 $ cd server
