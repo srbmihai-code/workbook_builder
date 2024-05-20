@@ -258,7 +258,7 @@ def approve():
 def after_request(response):
     now = datetime.now()
     timestamp = now.strftime('[%Y-%b-%d %H:%M]')
-    print(timestamp, request.remote_addr, request.method, request.scheme, request.full_path, response.status, response.get_data(as_text=True))
+    print(timestamp, request.remote_addr, request.method, request.scheme, request.full_path, response.status)
     return response
 
 if __name__ == '__main__':
