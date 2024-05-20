@@ -1,3 +1,5 @@
+// The initial page that is seen when first opening the app or after logging out
+
 const path = require('path');
 const fs = require('fs')
 const AdmZip = require('adm-zip');

@@ -1,3 +1,5 @@
+// The main menu, where workbooks can be seen and all features can be accessed from
+
 const fs = require('fs');
 const path = require('path');
 const AdmZip = require('adm-zip');
@@ -138,7 +140,7 @@ function see_chapters(dir) {
 
     let grid = document.getElementsByClassName("grid")[0]
     for (let chapter of chapters) {
-        chapter_data = JSON.parse(fs.readFileSync(path.join(dir, chapter, "answears.json"), 'utf8'));
+        chapter_data = JSON.parse(fs.readFileSync(path.join(dir, chapter, "answers.json"), 'utf8'));
 
         let [solved, total] = chapter_data.solved;
         let chapter_name = chapter_data.name;
@@ -189,14 +191,10 @@ function submit_form() {
     })
     .then(response => {
         if (!response.ok) {
-            response.text().then(errorMessage => {
-                if (errorMessage=='not found') {
-                    form.insertAdjacentHTML('beforeend', `<p class="error">Numele sau parola nu sunt corecte</p>`)
-                    server_error = true;
-                }
-
+            response.text().then(errorMessage =>  {
+                throw new Error(errorMessage)
             });
-            throw new Error('Numele sau parola nu sunt corecte')
+
         }
         filename = response.headers.get('X-Filename');
         return response.arrayBuffer();
@@ -214,6 +212,16 @@ function submit_form() {
         fs.unlinkSync(zipPath);
 
         form.insertAdjacentHTML('beforeend', `<p class="green">Culegerea a fost adaugată cu succes✅</p>`)
+    })
+    .catch(errorMessage => {
+        if (document.querySelector('.error'))
+            document.querySelector('.error').remove()
+        if (errorMessage=='not found') {
+            form.insertAdjacentHTML('beforeend', `<p class="error">Numele, autorul sau parola nu sunt corecte</p>`)
+        }
+        else
+            form.insertAdjacentHTML('beforeend', `<p class="error">A aparut o eroare cu descarcarea culegerii</p>`)
+
     })
 }
 
@@ -303,6 +311,8 @@ function download(public_workbooks_data) {
         place_to_show_error.querySelector('button').innerHTML = 'Descărcat'
     })
     .catch(e => {
+        if (document.querySelector('.error'))
+            document.querySelector('.error').remove()
         place_to_show_error.insertAdjacentHTML('beforeend', '<p class="error">A aparut o eroare cu descarcarea culegerii</p>')
         console.log(e)
     })

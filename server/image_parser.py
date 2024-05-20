@@ -2,6 +2,14 @@ from PIL import Image
 import os
 import re
 
+# Checks to see if a pixel is black or close to black
+# This is done to see if an exercise begins
+def is_blackish(pixel):
+    if isinstance(pixel, int):
+        return True if pixel < 90 else False
+    elif isinstance(pixel, tuple):
+        return True if (pixel[0] < 90 and pixel[1] < 90 and pixel[2] < 90) else False
+    raise Exception("Not an int or tuple")
 
 def parse_directory(directory, output_directory, first_ommit, last_ommit):
     image_number = 0
@@ -13,10 +21,10 @@ def parse_directory(directory, output_directory, first_ommit, last_ommit):
         pix = img.load()
         width,height = img.size
         found = False
-        # Detect and trim white space at the start of the image
+        # Detect and trim unnecessary white space at the start of the image
         for x in range(1,width):
             for y in range(1, height):
-                if (pix[x, y]!=(255,255,255) and pix[x,y] != 255):
+                if is_blackish(pix[x, y]):
                     found=True
                     break
             if found:
@@ -26,16 +34,17 @@ def parse_directory(directory, output_directory, first_ommit, last_ommit):
         # Detect all strips
         for y in range(1,height):
             for x in range(start_of_file, width):
-                if (pix[x, y]!=(255,255,255) and pix[x,y] != 255):
+                if is_blackish(pix[x, y]):
                     break
-            if (x!=(width-1) and start==0):
+            if x!=(width-1) and start==0:
                 start=y
-            elif (x==(width-1) and start!=0): 
+            elif x==(width-1) and start!=0: 
                 cropped_img.append([start_of_file,start,width,y])
                 start=0
         for i in range(len(cropped_img)-1):
             strip_space.append(cropped_img[i+1][1]-cropped_img[i][3])
-        # Delete
+        # Delete if they are close to eachother
+        # Diacritics would be split on separate lanes otherwise
         for i in range(1,len(cropped_img)):
             if strip_space[i-1] < 10 and cropped_img[i-1] is not None:
                 cropped_img[i-1][3]=cropped_img[i][3]
@@ -52,8 +61,6 @@ def parse_directory(directory, output_directory, first_ommit, last_ommit):
             savedimg = cropped_img[i]
             image_number+=1
             img.crop(tuple(savedimg)).save(os.path.join(output_directory, f"{image_number}.png"),"PNG")
-
-
 
 def sort_nicely(file_list):
     def try_int(s):
