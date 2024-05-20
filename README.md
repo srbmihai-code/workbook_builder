@@ -1,6 +1,6 @@
 # Workbook Buidler
 
-## Cum este si cum functioneaza?
+## Ce este si cum functioneaza?
 
 Workbook Builder este o platforma educationala in care profesorii pot creea culegeri interactive si elevii le pot accesa.
 Profesorii pot incarca exercitii cu rezolvarile lor, in format pdf sau imagine, iar aplicatia va face automat asocierea intre fiecare exercitiu si rezolvarea lui.
