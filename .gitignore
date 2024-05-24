@@ -93,9 +93,10 @@ out/
 
 node_modules/
 
-workbooks/
+workbooks/*
 !workbooks/exercitii.js
 !workbooks/exercitii.css
+workbooks/workbooks/*
 
 created_workbooks/
 
